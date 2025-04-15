@@ -17,6 +17,6 @@ app.use(createPinia())
 app.use(router)
 
 const userStore = useUserStore()
-await userStore.trackAuthChanges() // <-- czekamy na auth
+await userStore.trackAuthChanges()
 
 app.mount('#app')
