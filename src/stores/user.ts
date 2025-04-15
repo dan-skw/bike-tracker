@@ -56,7 +56,6 @@ export const useUserStore = defineStore('user', () => {
     getSession,
     saveSession,
     endSession,
-    setTemporaryUser,
   }
 })
 
