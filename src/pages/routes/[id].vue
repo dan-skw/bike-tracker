@@ -18,7 +18,10 @@ const path = ref<[number, number][]>([])
 const data = ref<DocumentData>()
 
 onMounted(async () => {
-  const docRef = doc(db, 'routes', userStore.user?.uid, 'entries', routeId.id as string)
+  if (!userStore.user?.uid) {
+    throw new Error('User not logged in')
+  }
+  const docRef = doc(db, 'routes', userStore.user.uid, 'entries', routeId.id as string)
   const docSnap = await getDoc(docRef)
   if (docSnap.exists()) {
     data.value = docSnap.data()
