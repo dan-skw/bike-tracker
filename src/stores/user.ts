@@ -16,12 +16,15 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const trackAuthChanges = () => {
-    if (isTrackingAuthChanges.value) return
+    return new Promise<void>((resolve) => {
+      if (isTrackingAuthChanges.value) return resolve()
 
-    isTrackingAuthChanges.value = true
+      isTrackingAuthChanges.value = true
 
-    onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser)
+      onAuthStateChanged(auth, (firebaseUser) => {
+        setUser(firebaseUser)
+        resolve()
+      })
     })
   }
 
