@@ -42,7 +42,7 @@
             Zaloguj się
           </RouterLink>
 
-          <RouterLink to="/register" class="rounded px-3 py-2 hover:bg-blue-100">
+          <RouterLink to="/signup" class="rounded px-3 py-2 hover:bg-blue-100">
             Zarejestruj się
           </RouterLink>
         </nav>
