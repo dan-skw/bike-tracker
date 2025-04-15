@@ -1,22 +1,3 @@
-<template>
-  <div class="space-y-4 p-4">
-    <div id="map" ref="mapContainer" class="h-[250px] w-full"></div>
-
-    <div v-if="!tracking">
-      <button class="btn btn-primary" @click="startTracking">Rozpocznij trasę</button>
-    </div>
-    <div v-else>
-      <p class="text-green-600">Zbieranie lokalizacji… (punktów: {{ path.length }})</p>
-      <p>Czas: {{ formattedTime }}</p>
-      <p>Dystans: {{ distanceKm.toFixed(2) }} km</p>
-      <div class="flex gap-2">
-        <button class="btn btn-secondary" @click="stopTracking">Koniec</button>
-        <button v-if="path.length > 1" class="btn btn-success" @click="save">Zapisz trasę</button>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import L from 'leaflet'
@@ -131,7 +112,6 @@ function stopTracking() {
 async function save() {
   try {
     await saveRoute(path.value, distanceKm.value, elapsedSeconds.value)
-    alert(`Trasa została zapisana z ID:`)
   } catch (err) {
     alert('Nie udało się zapisać trasy.' + err)
   }
@@ -161,6 +141,25 @@ function haversine(coord1: [number, number], coord2: [number, number]) {
   return R * c
 }
 </script>
+
+<template>
+  <div class="space-y-4 p-4">
+    <div id="map" ref="mapContainer" class="h-[250px] w-full"></div>
+
+    <div v-if="!tracking">
+      <button class="btn btn-primary" @click="startTracking">Rozpocznij trasę</button>
+    </div>
+    <div v-else>
+      <p class="text-green-600">Zbieranie lokalizacji… (punktów: {{ path.length }})</p>
+      <p>Czas: {{ formattedTime }}</p>
+      <p>Dystans: {{ distanceKm.toFixed(2) }} km</p>
+      <div class="flex gap-2">
+        <button class="btn btn-secondary" @click="stopTracking">Koniec</button>
+        <button v-if="path.length > 1" class="btn btn-success" @click="save">Zapisz trasę</button>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 #map {

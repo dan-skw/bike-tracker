@@ -78,7 +78,6 @@ const toggleSidebar = () => {
 const userStore = useUserStore()
 const router = useRouter()
 
-// Zainicjuj nasłuchiwanie zmian auth
 onMounted(() => {
   userStore.trackAuthChanges()
   userStore.getSession()
