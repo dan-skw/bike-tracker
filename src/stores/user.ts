@@ -6,17 +6,13 @@ import { auth } from '@/firebase/initFirebase'
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null)
   const isTrackingAuthChanges = ref(false)
-  const temporaryUser = ref()
+
   const setUser = (firebaseUser: User | null) => {
     user.value = firebaseUser
   }
 
   const clearUser = () => {
     user.value = null
-  }
-
-  const setTemporaryUser = (payload) => {
-    temporaryUser.value = payload
   }
 
   const trackAuthChanges = () => {
