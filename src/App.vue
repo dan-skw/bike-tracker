@@ -27,7 +27,7 @@ onMounted(async () => {
             <p class="text-gray-500">Loading...</p>
           </div>
         </template>
-      </Suspense> </RouterView
-    >"
+      </Suspense>
+    </RouterView>
   </MainLayout>
 </template>
