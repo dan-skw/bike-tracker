@@ -4,13 +4,21 @@ import { useAuth } from '@/auth/useAuth'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 const email = ref('')
 const password = ref('')
 const { login, loginWithGoogle, error } = useAuth()
 
 const handleLogin = async () => {
   await login(email.value, password.value)
-  router.push('/')
+  if (!error.value) {
+    router.push('/trackview')
+  } else {
+    console.error('Login failed:', error.value)
+  }
 }
 </script>
 
