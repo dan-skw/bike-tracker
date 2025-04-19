@@ -13,11 +13,12 @@ export const useRoutes = () => {
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
   }
 
-  const getRouteById = async (rideId: string) => {
-    const rideRef = doc(db, 'rides', rideId)
-    const rideSnap = await getDoc(rideRef)
-    if (!rideSnap.exists()) return null
-    return { id: rideSnap.id, ...rideSnap.data() }
+  const getRouteById = async (routeId: string) => {
+    if (!userStore.user) return null
+    const routeRef = doc(db, 'routes', userStore.user.uid, 'entries', routeId)
+    const routeSnap = await getDoc(routeRef)
+    if (!routeSnap.exists()) return null
+    return { id: routeRef.id, ...routeSnap.data() }
   }
 
   return {

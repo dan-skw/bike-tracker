@@ -8,6 +8,8 @@ import { getLocationName } from '@/utils/geolocation/getLocationName'
 import { saveRoute } from '../../utils/saveRoute'
 import { useRouter } from 'vue-router'
 
+import { useRouteStore } from '@/stores/route'
+
 const router = useRouter()
 
 const tracking = ref(false)
@@ -146,14 +148,15 @@ async function endTracking() {
     }
 
     try {
-      const newRouteId = await saveRoute(path.value, distanceKm.value, elapsedSeconds.value,
+      const routeId = await saveRoute(path.value, distanceKm.value, elapsedSeconds.value,
         {
           city: currentPosition.value.city,
           state: currentPosition.value.state,
           road: currentPosition.value.road,
         }
       )
-      router.push(`/routes/${newRouteId}`)
+      useRouteStore().setLatestRouteId(routeId)
+      router.push(`/trackview/success/${routeId}`)
     }
     catch (error) {
       console.error('Błąd podczas zapisywania trasy:', error)
@@ -178,7 +181,7 @@ function haversine(coord1: [number, number], coord2: [number, number]) {
   const toRad = (x: number) => (x * Math.PI) / 180
   const [lat1, lon1] = coord1
   const [lat2, lon2] = coord2
-  const R = 6371 // km
+  const R = 6371
 
   const dLat = toRad(lat2 - lat1)
   const dLon = toRad(lon2 - lon1)
@@ -191,7 +194,7 @@ function haversine(coord1: [number, number], coord2: [number, number]) {
 </script>
 
 <template>
-  <section class="p-6 space-y-5 w-full h-screen bg-white/80 overflow-hidden">
+  <section class="p-6 space-y-5 w-full h-screen bg-[#F2F0EF] overflow-hidden">
     <div class="flex flex-row justify-between items-center">
       <div class="">
         <h4 class="scroll-m-20 text-md font-semibold tracking-tight">Moja trasa</h4>
@@ -209,7 +212,7 @@ function haversine(coord1: [number, number], coord2: [number, number]) {
 
       <div class="z-10 flex flex-col items-center justify-center pointer-events-none">
         <div class="space-y-4 text-left w-full pointer-events-auto ">
-          <div class="p-4 rounded-lg shadow-md mt-5 flex justify-between items-center">
+          <div class="p-4 rounded-lg shadow-md mt-5 flex bg-white justify-between items-center gap-4">
             <div>
               <p class="text-md text-muted-foreground flex">
                 <iconify-icon icon="lucide:timer"></iconify-icon><span class="-translate-y-0.5">Czas</span>
