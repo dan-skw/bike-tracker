@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen flex-col overflow-hidden">
+  <div class="flex h-screen flex-col overflow-hidden bg-[#F2F0EF] ">
     <!-- Navbar -->
     <!-- <header class="flex items-center justify-between bg-blue-600 px-4 py-2 text-white">
       <div class="flex items-center gap-4">
