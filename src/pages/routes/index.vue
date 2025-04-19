@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { formatDate } from '@/utils/formatDate'
 
+
 const userStore = useUserStore()
 
 const { getUserRoutes } = useRoutes()
@@ -36,12 +37,8 @@ onMounted(async () => {
     <div v-else-if="routes.length === 0">Brak przejazdów</div>
 
     <ul class="space-y-2">
-      <li
-        v-for="route in routes"
-        :key="route.id"
-        class="cursor-pointer rounded border p-4 hover:bg-gray-50"
-        @click="goToDetails(route.id)"
-      >
+      <li v-for="route in routes" :key="route.id" class="cursor-pointer rounded border p-4 hover:bg-gray-50"
+        @click="goToDetails(route.id)">
         <div class="flex justify-between">
           <span class="font-semibold">{{ formatDate(route.createdAt) }}</span>
           <span>{{ route.distanceKm }} km</span>
