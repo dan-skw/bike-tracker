@@ -25,5 +25,6 @@ declare module 'vue-router/auto-routes' {
     '/signup/': RouteRecordInfo<'/signup/', '/signup', Record<never, never>, Record<never, never>>,
     '/signup/[username]': RouteRecordInfo<'/signup/[username]', '/signup/:username', { username: ParamValue<true> }, { username: ParamValue<false> }>,
     '/trackview/': RouteRecordInfo<'/trackview/', '/trackview', Record<never, never>, Record<never, never>>,
+    '/trackview/success/[routeId]': RouteRecordInfo<'/trackview/success/[routeId]', '/trackview/success/:routeId', { routeId: ParamValue<true> }, { routeId: ParamValue<false> }>,
   }
 }

@@ -33,16 +33,72 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="data" class="p-4">
-    <h2 class="mb-4 text-xl font-bold">
-      Szczegóły trasy odbytej dnia {{ formatDate(data.createdAt) }}
-    </h2>
-    <RouteMap :path="path" />
-    <div class="mt-4 flex justify-between">
-      <div class="text-sm text-gray-500">Dystans: {{ data.distanceKm }} km</div>
-      <div class="text-sm text-gray-500">
-        Czas trwania: {{ Math.floor(data.durationSeconds / 60) }} min
+  <section v-if="data" class="p-6 space-y-5 w-full h-screen overflow-hidden">
+    <div class="flex flex-row justify-between items-center">
+      <div class="">
+        <h4 class="scroll-m-20 text-md font-semibold tracking-tight">Podsumowanie twojej trasy</h4>
+        <h2 class="scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+          {{ data.location.city }}
+        </h2>
+        <p>{{ data.location.state }} {{ formatDate(data.createdAt) }}</p>
       </div>
+      <iconify-icon icon="lucide:route" width="58"></iconify-icon>
+
     </div>
-  </div>
+
+
+    <div class="h-full">
+      <RouteMap :path="path" />
+
+      <div class="z-10 flex flex-col items-center justify-center pointer-events-none">
+        <div class="space-y-4 text-left w-full pointer-events-auto ">
+          <div class="mt-5 flex flex-col gap-4 justify-between items-center">
+            <div class="grid grid-cols-2 gap-4 w-full h-1/2 ">
+              <div class="bg-white shadow-md rounded-lg w-full h-full flex flex-col items-center p-2">
+                <iconify-icon icon="lucide:timer" width="50"></iconify-icon>
+                <h2>Czas</h2>
+                <p class="text-xl font-bold">
+                  {{ Math.floor(data.durationSeconds / 3600) }} h
+                  {{ Math.floor((data.durationSeconds % 3600) / 60) }} min
+                </p>
+              </div>
+              <div class="bg-white shadow-md rounded-lg w-full h-full flex flex-col items-center p-2">
+                <iconify-icon icon="lucide:map-pin" width="50"></iconify-icon>
+                <h2>Dystans</h2>
+                <p class="text-xl font-bold">
+                  {{ data.distanceKm }} km
+                </p>
+              </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md w-full h-1/2 ">
+              <div class="flex flex-col items-center justify-center h-full p-4">
+                <iconify-icon icon="lucide:map" width="50"></iconify-icon>
+                <h2>Mapa</h2>
+                <p class="text-xl font-bold">
+                  {{ data.location.city }}
+                </p>
+              </div>
+              <div class="flex flex-col items-center justify-center h-full p-4">
+                <p class="text-md text-muted-foreground flex">
+                  <iconify-icon icon="lucide:map-pin"></iconify-icon>
+                  <span class="-translatey-0.5">Punkty startowe</span>
+                </p>
+
+              </div>
+              <div class="flex flex-col items-center justify-center h-full p-4">
+                <p class="text-md text-muted-foreground flex">
+                  <iconify-icon icon="lucide:map-pin"></iconify-icon>
+                  <span class="-translatey-0.5">Punkty końcowe</span>
+                </p>
+                <p class="text-xl font-bold">
+                  {{ data.location.city }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
 </template>

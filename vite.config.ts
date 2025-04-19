@@ -32,7 +32,7 @@ export default defineConfig({
   },
   server: {
     host: true,
-    allowedHosts: ['f1f6-84-40-219-225.ngrok-free.app'],
+    allowedHosts: ['4f5a-83-29-209-239.ngrok-free.app'],
   },
   build: {
     target: 'esnext',
