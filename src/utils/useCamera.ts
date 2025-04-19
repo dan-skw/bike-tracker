@@ -1,4 +1,3 @@
-import { ref } from 'vue'
 import { storage } from '@/firebase/initFirebase'
 import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 import { useUserStore } from '@/stores/user'
