@@ -8,7 +8,7 @@ const routeStore = useRouteStore()
 const routeId = routeStore.latestRouteId ? routeStore.getLatestRouteId() : window.location.pathname
     .split('/').pop()
 
-const { uploadPhoto } = useCamera()
+const { uploadPhoto } = useCamera() ?? {}
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const file = ref<File | null>(null)
