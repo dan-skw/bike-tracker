@@ -1,7 +1,7 @@
 <template>
-  <div class="flex h-screen flex-col">
+  <div class="flex h-screen flex-col overflow-hidden">
     <!-- Navbar -->
-    <header class="flex items-center justify-between bg-blue-600 px-4 py-2 text-white">
+    <!-- <header class="flex items-center justify-between bg-blue-600 px-4 py-2 text-white">
       <div class="flex items-center gap-4">
         <button class="lg:hidden" @click="toggleSidebar">
           <MenuIcon class="h-6 w-6" />
@@ -9,32 +9,25 @@
         <iconify-icon icon="mdi:bike" class="h-8 w-8" />
         <span class="text-lg font-bold">Bike Tracker</span>
       </div>
-    </header>
+    </header> -->
 
     <!-- Main content -->
     <div class="flex flex-1">
       <!-- Sidebar -->
-      <aside
-        :class="[
-          'z-10 bg-gray-100 p-4 shadow-md transition-transform duration-300 lg:w-64 lg:translate-x-0',
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full',
-        ]"
-        class="fixed inset-y-0 z-40 w-64 lg:static"
-      >
+      <aside :class="[
+        'z-10 bg-gray-100 p-4 shadow-md transition-transform duration-300 lg:w-64 lg:translate-x-0',
+        sidebarOpen ? 'translate-x-0' : '-translate-x-full',
+      ]" class="fixed inset-y-0 z-40 w-64 lg:static">
         <nav class="flex flex-col gap-2">
-          <RouterLink
-            v-if="userStore.isLoggedIn"
-            to="/trackview"
-            class="rounded px-3 py-2 hover:bg-blue-100"
-          >
+          <RouterLink v-if="userStore.isLoggedIn" to="/trackview" class="rounded px-3 py-2 hover:bg-blue-100">
             Track View
           </RouterLink>
+          <RouterLink v-if="userStore.isLoggedIn" to="/routes" class="rounded px-3 py-2 hover:bg-blue-100">
+            Historia przejazdów
+          </RouterLink>
 
-          <button
-            v-if="userStore.isLoggedIn"
-            class="rounded px-3 py-2 text-left text-red-600 hover:bg-red-100"
-            @click="signOut"
-          >
+          <button v-if="userStore.isLoggedIn" class="rounded px-3 py-2 text-left text-red-600 hover:bg-red-100"
+            @click="signOut">
             Sign Out
           </button>
 
@@ -54,12 +47,12 @@
       </main>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer
     <footer v-if="userStore.isLoggedIn" class="bg-gray-200 p-4 text-center text-sm text-gray-700">
       id: {{ userStore.user?.uid }}
     </footer>
 
-    <footer v-else class="bg-gray-200 p-4 text-center text-sm text-gray-700">Polo Rider</footer>
+    <footer v-else class="bg-gray-200 p-4 text-center text-sm text-gray-700">Polo Rider</footer> -->
   </div>
 </template>
 
