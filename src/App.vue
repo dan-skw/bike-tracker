@@ -2,6 +2,7 @@
 import MainLayout from '@/layouts/MainLayout.vue'
 import { useUserStore } from '@/stores/user'
 import { onMounted } from 'vue'
+import { Toaster } from '@/components/ui/sonner'
 
 const userStore = useUserStore()
 
@@ -18,6 +19,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <Toaster class="pointer-events-auto" />
   <MainLayout>
     <RouterView v-slot="{ Component, route }">
       <Suspense>
