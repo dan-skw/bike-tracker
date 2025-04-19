@@ -1,8 +1,3 @@
-<!-- components/RouteMap.vue -->
-<template>
-  <div id="map" ref="mapContainer"></div>
-</template>
-
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import L from 'leaflet'
@@ -47,9 +42,6 @@ watch(
 )
 </script>
 
-<style scoped>
-#map {
-  height: 400px;
-  width: 100%;
-}
-</style>
+<template>
+  <div id="map" ref="mapContainer" class="z-0 shadow-md p-4 rounded-lg h-1/3" />
+</template>
