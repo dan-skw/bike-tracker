@@ -34,7 +34,6 @@ onMounted(() => {
   initMap()
 })
 
-// jeśli path zmieni się po załadowaniu
 watch(
   () => props.path,
   () => {

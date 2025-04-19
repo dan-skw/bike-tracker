@@ -1,17 +1,35 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import L from 'leaflet'
-import { getAuth } from 'firebase/auth'
 
+import Button from '@/components/ui/button/Button.vue'
+
+import { getLocationName } from '@/utils/geolocation/getLocationName'
 import { saveRoute } from '../../utils/saveRoute'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const tracking = ref(false)
 const path = ref<[number, number][]>([])
 const watchId = ref<number | null>(null)
 const mapContainer = ref<HTMLElement | null>(null)
 const startTime = ref<number | null>(null)
+const toggle = ref(false)
+
+const currentPosition = ref<{
+  city: string
+  state: string
+  road: string
+}>({
+  city: '',
+  state: '',
+  road: '',
+})
 const elapsedSeconds = ref(0)
 let interval: number | null = null
+
+
 
 let map: L.Map | null = null
 let polyline: L.Polyline | null = null
@@ -38,6 +56,17 @@ onMounted(() => {
     (position) => {
       const { latitude, longitude } = position.coords
       initMap(latitude, longitude)
+      getLocationName(latitude, longitude).then((location) => {
+        if (location) {
+          currentPosition.value = {
+            city: location.city || '',
+            state: location.state || '',
+            road: location.road || '',
+          }
+        } else {
+          console.log('Nie można uzyskać nazwy lokalizacji.')
+        }
+      })
     },
     (err) => {
       console.error(err)
@@ -60,23 +89,18 @@ function initMap(lat: number, lng: number) {
   marker = L.marker([lat, lng]).addTo(map)
 }
 
-function startTracking() {
-  const user = getAuth().currentUser
-  if (!user) {
-    alert('Musisz być zalogowany, aby rozpocząć trasę.')
-    return
-  }
-  tracking.value = true
-  path.value = []
-  startTime.value = Date.now()
-  elapsedSeconds.value = 0
+function toggleTracking() {
+  toggle.value = !toggle.value
 
-  interval = window.setInterval(() => {
-    elapsedSeconds.value++
-  }, 1000)
+  if (!tracking.value) {
+    tracking.value = true
+    startTime.value = Date.now() - elapsedSeconds.value * 1000
 
-  watchId.value = navigator.geolocation.watchPosition(
-    (position) => {
+    interval = window.setInterval(() => {
+      elapsedSeconds.value = Math.floor((Date.now() - (startTime.value || 0)) / 1000)
+    }, 1000)
+
+    watchId.value = navigator.geolocation.watchPosition((position) => {
       const coords: [number, number] = [position.coords.latitude, position.coords.longitude]
       path.value.push(coords)
 
@@ -84,36 +108,60 @@ function startTracking() {
       if (marker) marker.setLatLng(coords)
       if (map) map.panTo(coords)
     },
-    (err) => {
-      console.error(err)
-      alert('Nie można pobrać lokalizacji.')
-    },
-    {
-      enableHighAccuracy: true,
-      maximumAge: 1000,
-      timeout: 5000,
-    },
-  )
+      (error) => {
+        console.error('Błąd geolokalizacji:', error)
+        alert('Nie udało się uzyskać lokalizacji.')
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 1000,
+        timeout: 5000,
+      }
+    )
+  } else {
+    tracking.value = false
+    if (watchId.value !== null) {
+      navigator.geolocation.clearWatch(watchId.value)
+      watchId.value = null
+    }
+
+    if (interval !== null) {
+      clearInterval(interval)
+      interval = null
+    }
+  }
 }
 
-function stopTracking() {
-  tracking.value = false
-  if (watchId.value !== null) {
-    navigator.geolocation.clearWatch(watchId.value)
-    watchId.value = null
-  }
+async function endTracking() {
+  if (tracking.value) {
+    tracking.value = false
+    if (watchId.value !== null) {
+      navigator.geolocation.clearWatch(watchId.value)
+      watchId.value = null
+    }
 
-  if (interval !== null) {
-    clearInterval(interval)
-    interval = null
-  }
-}
+    if (interval !== null) {
+      clearInterval(interval)
+      interval = null
+    }
 
-async function save() {
-  try {
-    await saveRoute(path.value, distanceKm.value, elapsedSeconds.value)
-  } catch (err) {
-    alert('Nie udało się zapisać trasy.' + err)
+    try {
+      const newRouteId = await saveRoute(path.value, distanceKm.value, elapsedSeconds.value,
+        {
+          city: currentPosition.value.city,
+          state: currentPosition.value.state,
+          road: currentPosition.value.road,
+        }
+      )
+      router.push(`/routes/${newRouteId}`)
+    }
+    catch (error) {
+      console.error('Błąd podczas zapisywania trasy:', error)
+    }
+    path.value = []
+    elapsedSeconds.value = 0
+    startTime.value = null
+
   }
 }
 
@@ -143,27 +191,49 @@ function haversine(coord1: [number, number], coord2: [number, number]) {
 </script>
 
 <template>
-  <div class="space-y-4 p-4">
-    <div id="map" ref="mapContainer" class="h-[250px] w-full"></div>
+  <section class="p-6 space-y-5 w-full h-screen bg-white/80 overflow-hidden">
+    <div class="flex flex-row justify-between items-center">
+      <div class="">
+        <h4 class="scroll-m-20 text-md font-semibold tracking-tight">Moja trasa</h4>
+        <h2 class="scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+          {{ currentPosition.city }}
+        </h2>
+      </div>
+      <iconify-icon icon="mdi:bike-fast" width="58"></iconify-icon>
 
-    <div v-if="!tracking">
-      <button class="btn btn-primary" @click="startTracking">Rozpocznij trasę</button>
     </div>
-    <div v-else>
-      <p class="text-green-600">Zbieranie lokalizacji… (punktów: {{ path.length }})</p>
-      <p>Czas: {{ formattedTime }}</p>
-      <p>Dystans: {{ distanceKm.toFixed(2) }} km</p>
-      <div class="flex gap-2">
-        <button class="btn btn-secondary" @click="stopTracking">Koniec</button>
-        <button v-if="path.length > 1" class="btn btn-success" @click="save">Zapisz trasę</button>
+
+
+    <div class="h-full">
+      <div id="map" ref="mapContainer" class="z-0 shadow-md p-4 rounded-lg h-3/5" />
+
+      <div class="z-10 flex flex-col items-center justify-center pointer-events-none">
+        <div class="space-y-4 text-left w-full pointer-events-auto ">
+          <div class="p-4 rounded-lg shadow-md mt-5 flex justify-between items-center">
+            <div>
+              <p class="text-md text-muted-foreground flex">
+                <iconify-icon icon="lucide:timer"></iconify-icon><span class="-translate-y-0.5">Czas</span>
+              </p>
+              <p class="text-3xl font-bold text-primary">
+                {{ formattedTime }}
+              </p>
+              <p class="text-md text-muted-foreground">{{ distanceKm }} km</p>
+            </div>
+            <Button class="rounded-full  text-white w-14 h-14" @click="toggleTracking">
+              <iconify-icon :icon="toggle ? 'lucide:pause' : 'lucide:play'" width="30"></iconify-icon>
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div v-if="tracking" class="flex flex-col items-center justify-center  mt-5">
+        <Button class="p-8 w-full" @click="endTracking">Zakończ trasę</Button>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
 #map {
-  height: 400px;
   width: 100%;
 }
 </style>
