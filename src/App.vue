@@ -21,15 +21,15 @@ onMounted(async () => {
 <template>
   <Toaster class="pointer-events-auto" />
   <MainLayout>
-    <RouterView v-slot="{ Component, route }">
-      <Suspense>
+    <Suspense>
+      <RouterView v-slot="{ Component, route }">
         <Component :is="Component" :key="route.name" />
-        <template #fallback>
-          <div class="flex h-screen items-center justify-center">
-            <p class="text-gray-500">Loading...</p>
-          </div>
-        </template>
-      </Suspense>
-    </RouterView>
+      </RouterView>
+      <template #fallback>
+        <div class="flex h-screen items-center justify-center">
+          <p class="text-gray-500">Loading...</p>
+        </div>
+      </template>
+    </Suspense>
   </MainLayout>
 </template>
