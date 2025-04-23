@@ -33,7 +33,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section v-if="data" class="p-6 space-y-5 w-full h-screen overflow-hidden">
+  <section v-if="data" class="space-y-5 w-full h-screen overflow-hidden">
     <div class="flex flex-row justify-between items-center">
       <div class="">
         <h4 class="scroll-m-20 text-md font-semibold tracking-tight">Podsumowanie twojej trasy</h4>

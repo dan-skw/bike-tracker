@@ -51,7 +51,7 @@ const triggerFile = () => {
 </script>
 
 <template>
-    <div class="flex flex-col py-8 px-4 items-end h-screen">
+    <div class="flex flex-col items-end h-screen">
         <RouterLink to="/" class="font-semibold text-lg">Pomiń</RouterLink>
         <div class="flex flex-col items-center justify-center h-full w-full">
             <div class="text-8xl p-2">🥳</div>
