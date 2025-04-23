@@ -169,9 +169,6 @@ async function endTracking() {
 
   }
 }
-
-calculateDistance(path.value)
-
 </script>
 
 <template>

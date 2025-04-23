@@ -7,9 +7,11 @@ import { formatDate } from '@/utils/formatDate'
 import { groupRoutesByDay } from '@/utils/routes/groupRoutesByDay'
 const userStore = useUserStore()
 
+import type { RouteEntry } from '@/types/RouteEntry'
+
 const { getUserRoutes } = useRoutes()
 
-const routes = ref<any[]>([])
+const routes = ref<RouteEntry[]>([])
 const loading = ref(false)
 const router = useRouter()
 
