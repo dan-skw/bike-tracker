@@ -7,10 +7,15 @@ import Button from '@/components/ui/button/Button.vue'
 import { getLocationName } from '@/utils/geolocation/getLocationName'
 import { calculateDistance } from '@/utils/geolocation/calculateDistance'
 
-import { saveRoute } from '../../utils/routes/saveRoute'
+import { useRoutes } from '@/utils/routes/useRoutes'
 import { useRouter } from 'vue-router'
 
 import { useRouteStore } from '@/stores/route'
+import { useUserStore } from '@/stores/user'
+
+import { useUserStats } from '@/utils/routes/useUserStats'
+const { updateStatsAfterRouteSave } = useUserStats()
+const { saveRoute } = useRoutes()
 
 const router = useRouter()
 
@@ -89,6 +94,7 @@ function initMap(lat: number, lng: number) {
     attribution: '&copy; OpenStreetMap contributors',
   }).addTo(map)
 
+
   polyline = L.polyline([], { color: 'blue' }).addTo(map)
   marker = L.marker([lat, lng]).addTo(map)
 }
@@ -158,6 +164,7 @@ async function endTracking() {
         }
       )
       useRouteStore().setLatestRouteId(routeId)
+      await updateStatsAfterRouteSave(useUserStore().user?.uid as string, distanceKm.value, elapsedSeconds.value)
       router.push(`/trackview/success/${routeId}`)
     }
     catch (error) {
@@ -172,7 +179,7 @@ async function endTracking() {
 </script>
 
 <template>
-  <section class="space-y-5 w-full h-screen bg-[#F2F0EF] overflow-hidden">
+  <section class="space-y-5 w-full h-full  bg-[#F2F0EF] overflow-hidden">
     <div class="flex flex-row justify-between items-center">
       <div class="">
         <h4 class="scroll-m-20 text-md font-semibold tracking-tight">Moja trasa</h4>
@@ -186,7 +193,7 @@ async function endTracking() {
 
 
     <div class="h-full">
-      <div id="map" ref="mapContainer" class="z-0 shadow-md p-4 rounded-lg h-3/5" />
+      <div id="map" ref="mapContainer" class="z-0 shadow-md p-4 rounded-lg h-2/5" />
 
       <div class="z-10 flex flex-col items-center justify-center pointer-events-none">
         <div class="space-y-4 text-left w-full pointer-events-auto ">

@@ -23,19 +23,27 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-50 p-4">
-    <div class="w-full max-w-md space-y-4 rounded-2xl bg-white p-6 shadow-lg">
-      <h1 class="text-center text-2xl font-semibold">Logowanie</h1>
+  <section class="h-full flex flex-col items-center justify-center px-6 py-12 bg-[#F2F0EF] space-y-6">
+    <div class="text-center space-y-1">
+      <h1 class="scroll-m-20 text-3xl font-semibold tracking-tight">Logowanie</h1>
+      <p class="text-sm text-muted-foreground">Zaloguj się, aby kontynuować</p>
+    </div>
 
+    <div class="bg-white rounded-xl shadow-md p-6 w-full max-w-sm space-y-4">
       <Input v-model="email" type="email" placeholder="Email" />
       <Input v-model="password" type="password" placeholder="Hasło" />
 
       <Button class="w-full" @click="handleLogin">Zaloguj się</Button>
+      <Separator />
       <Button variant="outline" class="w-full" @click="loginWithGoogle">
         Zaloguj się przez Google
       </Button>
 
       <p v-if="error" class="text-center text-sm text-red-500">{{ error }}</p>
     </div>
-  </div>
+
+    <RouterLink to="/signup" class="text-sm text-muted-foreground hover:underline mt-2">
+      Nie masz konta? Zarejestruj się
+    </RouterLink>
+  </section>
 </template>

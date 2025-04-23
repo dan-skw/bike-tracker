@@ -13,7 +13,7 @@ export function useCamera() {
     const formattedDate = format(now, 'yyyy-MM-dd-HH-mm-ss')
     const fileName = `${routeId}-${formattedDate}.jpg`
 
-    const routesRef = storageRef(storage, `routes-photos/${userId}/${fileName}`)
+    const routesRef = storageRef(storage, `routes-photos/${userId}/${routeId}/${fileName}`)
     const metadata = {
       contentType: file.type || 'image/jpeg',
     }

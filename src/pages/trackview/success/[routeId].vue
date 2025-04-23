@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouteStore } from '@/stores/route'
-import { useCamera } from '@/utils/useCamera'
+import { useCamera } from '@/utils/camera/useCamera'
 import { toast } from 'vue-sonner'
 
 const routeStore = useRouteStore()
@@ -25,7 +25,6 @@ const handleFileChange = async (event: Event) => {
         imgLoaded.value = true
     }
 }
-
 
 const handleUpload = async () => {
     imgUploading.value = true

@@ -7,6 +7,7 @@ import 'iconify-icon'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { useUserStore } from '@/stores/user'
+import { DataLoaderPlugin } from 'unplugin-vue-router/data-loaders'
 
 import App from './App.vue'
 import router from './router'
@@ -14,6 +15,7 @@ import router from './router'
 const app = createApp(App)
 
 app.use(createPinia())
+app.use(DataLoaderPlugin, { router })
 app.use(router)
 
 const userStore = useUserStore()
