@@ -43,5 +43,5 @@ watch(
 </script>
 
 <template>
-  <div id="map" ref="mapContainer" class="z-0 shadow-md p-4 rounded-lg h-1/3" />
+  <div id="map" ref="mapContainer" class="z-0 shadow-md p-4 rounded-lg" />
 </template>
