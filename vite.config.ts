@@ -34,7 +34,9 @@ export default defineConfig({
     host: true,
     allowedHosts: ['4f5a-83-29-209-239.ngrok-free.app'],
   },
+  base: '/',
   build: {
     target: 'esnext',
+    outDir: 'dist',
   },
 })
