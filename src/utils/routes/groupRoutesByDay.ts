@@ -1,19 +1,29 @@
 // src/utils/groupRoutesByDay.ts
-import { format } from 'date-fns'
-import { pl } from 'date-fns/locale'
+import type { RouteEntry } from '@/types/RouteEntry'
+import { formatDateToPl } from '../formatDateToPl'
 
-export function groupRoutesByDay(routes: any[]) {
-  const groups: Record<string, any[]> = {}
+export function groupRoutesByDay(routes: RouteEntry[]) {
+  const groupedMap = new Map<string, { date: Date; entries: RouteEntry[] }>()
 
   for (const route of routes) {
-    const date = route.createdAt?.toDate?.() ?? new Date(route.createdAt)
-    const key = format(date, 'EEEE, dd MMMM', { locale: pl })
+    const date = route.createdAt.toDate()
+    const key = formatDateToPl(route.createdAt)
 
-    if (!groups[key]) {
-      groups[key] = []
+    if (!groupedMap.has(key)) {
+      groupedMap.set(key, { date, entries: [] })
     }
-    groups[key].push(route)
+    groupedMap.get(key)!.entries.push(route)
   }
 
-  return groups
+  const sortedEntries = [...groupedMap.entries()]
+    .sort((a, b) => b[1].date.getTime() - a[1].date.getTime())
+    .reduce(
+      (acc, [key, value]) => {
+        acc[key] = value.entries
+        return acc
+      },
+      {} as Record<string, RouteEntry[]>,
+    )
+
+  return sortedEntries
 }

@@ -54,8 +54,8 @@ onMounted(async () => {
         <h3 class="text-lg font-semibold mb-2 ">{{ day }}</h3>
 
         <ul class="space-y-2">
-          <li v-for="route in dayRoutes" :key="route.id" class="cursor-pointer rounded border p-4 hover:bg-gray-50"
-            @click="goToDetails(route.id)">
+          <li v-for="route in dayRoutes" :key="route.id"
+            class="cursor-pointer rounded border p-4 bg-white hover:bg-gray-50" @click="goToDetails(route.id)">
             <div class="flex justify-between">
               <span class="font-semibold">{{ formatDate(route.createdAt) }}</span>
               <span>{{ route.distanceKm }} km</span>
