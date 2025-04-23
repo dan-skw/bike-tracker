@@ -5,7 +5,9 @@ import L from 'leaflet'
 import Button from '@/components/ui/button/Button.vue'
 
 import { getLocationName } from '@/utils/geolocation/getLocationName'
-import { saveRoute } from '../../utils/saveRoute'
+import { calculateDistance } from '@/utils/geolocation/calculateDistance'
+
+import { saveRoute } from '../../utils/routes/saveRoute'
 import { useRouter } from 'vue-router'
 
 import { useRouteStore } from '@/stores/route'
@@ -167,34 +169,10 @@ async function endTracking() {
 
   }
 }
-
-// Funkcja pomocnicza: oblicz dystans w kilometrach
-function calculateDistance(coords: [number, number][]) {
-  let distance = 0
-  for (let i = 1; i < coords.length; i++) {
-    distance += haversine(coords[i - 1], coords[i])
-  }
-  return distance
-}
-
-function haversine(coord1: [number, number], coord2: [number, number]) {
-  const toRad = (x: number) => (x * Math.PI) / 180
-  const [lat1, lon1] = coord1
-  const [lat2, lon2] = coord2
-  const R = 6371
-
-  const dLat = toRad(lat2 - lat1)
-  const dLon = toRad(lon2 - lon1)
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-  return R * c
-}
 </script>
 
 <template>
-  <section class="p-6 space-y-5 w-full h-screen bg-[#F2F0EF] overflow-hidden">
+  <section class="space-y-5 w-full h-screen bg-[#F2F0EF] overflow-hidden">
     <div class="flex flex-row justify-between items-center">
       <div class="">
         <h4 class="scroll-m-20 text-md font-semibold tracking-tight">Moja trasa</h4>
