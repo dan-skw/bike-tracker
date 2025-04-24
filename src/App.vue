@@ -19,7 +19,7 @@ onMounted(async () => {
       router.push('/login')
     }
   } else {
-    console.log('User is not logged in')
+    router.push('/login')
   }
 })
 </script>
