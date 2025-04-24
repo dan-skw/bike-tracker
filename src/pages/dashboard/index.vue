@@ -57,7 +57,7 @@ onMounted(async () => {
                     Twoje statystyki
                 </h2>
             </div>
-            <iconify-icon icon="lucide:gauge" width="40" />
+            <iconify-icon icon="lucide:gauge" width="58" />
         </div>
 
         <div v-if="stats" class="grid grid-cols-2 gap-4">

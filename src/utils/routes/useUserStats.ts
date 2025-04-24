@@ -14,14 +14,14 @@ export const useUserStats = () => {
 
       if (!statsDoc.exists()) {
         transaction.set(statsRef, {
-          totalDistanceKm: distanceKm,
+          totalDistanceKm: distanceKm / 1000,
           totalDurationSeconds: durationSeconds,
           totalRoutes: 1,
           lastUpdated: new Date(),
         })
       } else {
         transaction.update(statsRef, {
-          totalDistanceKm: increment(distanceKm),
+          totalDistanceKm: increment(distanceKm / 1000),
           totalDurationSeconds: increment(durationSeconds),
           totalRoutes: increment(1),
           lastUpdated: new Date(),
