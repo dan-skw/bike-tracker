@@ -3,6 +3,8 @@ import MainLayout from '@/layouts/MainLayout.vue'
 import { useUserStore } from '@/stores/user'
 import { onMounted } from 'vue'
 import { Toaster } from '@/components/ui/sonner'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const userStore = useUserStore()
 
@@ -11,7 +13,11 @@ onMounted(async () => {
   await userStore.trackAuthChanges()
 
   if (userStore.user) {
-    console.log('User is logged in:', userStore.user)
+    if (userStore.user) {
+      router.push('/dashboard')
+    } else {
+      router.push('/login')
+    }
   } else {
     console.log('User is not logged in')
   }

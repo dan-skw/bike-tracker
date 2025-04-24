@@ -33,7 +33,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="">
+  <section class="h-full">
     <div class="flex flex-row justify-between items-center">
       <div class="">
         <h4 class="scroll-m-20 text-md font-semibold tracking-tight">Historia</h4>

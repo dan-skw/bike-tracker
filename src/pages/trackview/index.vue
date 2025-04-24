@@ -44,7 +44,7 @@ let map: L.Map | null = null
 let polyline: L.Polyline | null = null
 let marker: L.Marker | null = null
 
-const distanceKm = computed(() => calculateDistance(path.value))
+const distanceKm = computed(() => calculateDistance(path.value) / 1000)
 
 const formattedTime = computed(() => {
   const sec = elapsedSeconds.value % 60
