@@ -7,6 +7,7 @@ export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null)
   const isTrackingAuthChanges = ref(false)
 
+
   const setUser = (firebaseUser: User | null) => {
     user.value = firebaseUser
   }

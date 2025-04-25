@@ -10,7 +10,6 @@ export const getLocationName = async (lat: number, lon: number) => {
     const city: string = data.address.city || data.address.town || data.address.village
     const state: string = data.address.state
     const road: string = data.address.road
-    // return `${road ? road + ', ' : ''}${city ?? 'nieznana lokalizacja.'}`
     return {
       city: city ?? '',
       state: state ?? '',
