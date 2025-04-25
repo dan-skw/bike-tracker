@@ -22,7 +22,10 @@ const stats = ref<UserStats>({
 
 const lastSavedRoute = ref<RouteEntry | null>(null)
 
+const loading = ref(false)
+
 onMounted(async () => {
+    loading.value = true
     const userId = userStore?.uid
     if (!userId) return
 
@@ -40,7 +43,7 @@ onMounted(async () => {
 
         stats.value = statsData
         lastSavedRoute.value = await getLastSavedRoute()
-        console.log('Ostatnia trasa:', lastSavedRoute.value)
+        loading.value = false
     } else {
         console.log('Nie znaleziono statystyk użytkownika')
     }
@@ -49,40 +52,38 @@ onMounted(async () => {
 </script>
 
 <template>
-    <section class="space-y-6">
-        <div v-if="stats" class="flex flex-row justify-between items-center">
-            <div class="">
-                <h4 class="scroll-m-20 text-md font-semibold tracking-tight">Podsumowanie</h4>
-                <h2 class="scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
-                    Twoje statystyki
-                </h2>
-            </div>
-            <iconify-icon icon="lucide:gauge" width="58" />
+    <section class="space-y-6 h-full">
+        <div v-if="loading" class="h-full flex flex-col items-center justify-center bg-[#F2F0EF]">
+            <Loader />
         </div>
 
-        <div v-if="stats" class="grid grid-cols-2 gap-4">
-            <div class="bg-white rounded-lg shadow p-4">
-                <p class="text-gray-500 text-sm">Łączny dystans</p>
-                <p class="text-xl font-semibold">{{ stats.totalDistanceKm }} km</p>
+        <div v-else class="space-y-6 ">
+            <div v-if="stats" class="flex flex-row justify-between items-center">
+                <div class="">
+                    <h4 class="scroll-m-20 text-md font-semibold tracking-tight">Podsumowanie</h4>
+                    <h2 class="scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+                        Twoje statystyki
+                    </h2>
+                </div>
+                <iconify-icon icon="lucide:gauge" width="58" />
             </div>
-            <div class="bg-white rounded-lg shadow p-4">
-                <p class="text-gray-500 text-sm">Łączny czas</p>
-                <p class="text-xl font-semibold">{{ formatTime(stats.totalDurationSeconds) }}</p>
-            </div>
-            <div class="bg-white rounded-lg shadow p-4">
-                <p class="text-gray-500 text-sm">Liczba tras</p>
-                <p class="text-xl font-semibold">{{ stats.totalRoutes }}</p>
-            </div>
-            <div class="bg-white rounded-lg shadow p-4">
-                <p class="text-gray-500 text-sm">Ulubione miasto</p>
-                <p class="text-xl font-semibold">krak</p>
+
+            <div v-if="stats" class="grid grid-cols-2 gap-4">
+                <StatCard label="Łączny dystans" :value="`${stats.totalDistanceKm} km`" icon="lucide:map"
+                    iconBg="bg-blue-100" iconColor="text-blue-600" />
+                <StatCard label="Łączny czas" :value="formatTime(stats.totalDurationSeconds)" icon="lucide:timer"
+                    iconBg="bg-green-100" iconColor="text-green-600" />
+                <StatCard label="Liczba tras" :value="stats.totalRoutes" icon="lucide:bike" iconBg="bg-yellow-100"
+                    iconColor="text-yellow-600" />
+                <StatCard label="Ulubione miasto" value="Kraków" icon="lucide:map-pin" iconBg="bg-purple-100"
+                    iconColor="text-purple-600" />
             </div>
         </div>
 
         <div v-if="lastSavedRoute" class="bg-white rounded-lg shadow p-4">
             <h2 class="text-lg font-bold mb-2">Ostatnia aktywność</h2>
             <p class="text-gray-500 text-sm">Trasa z {{ formatDateToPl(lastSavedRoute.createdAt) }}</p>
-            <p class="text-md">📍 {{ lastSavedRoute.location.city }} – {{ lastSavedRoute.distanceKm }} km– {{
+            <p class="text-md">📍 {{ lastSavedRoute.location.city }} – {{ lastSavedRoute.distanceKm }} km – {{
                 formatTime(lastSavedRoute.durationSeconds) }}</p>
         </div>
     </section>

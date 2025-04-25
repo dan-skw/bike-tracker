@@ -18,5 +18,6 @@ export function calculateDistance(coords: [number, number][]) {
   for (let i = 1; i < coords.length; i++) {
     distance += haversine(coords[i - 1], coords[i])
   }
+  distance = Math.round(distance * 100) / 100
   return distance
 }

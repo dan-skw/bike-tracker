@@ -11,11 +11,14 @@ declare module 'vue' {
     BottomNavbar: typeof import('./src/components/BottomNavbar.vue')['default']
     Button: typeof import('./src/components/ui/button/Button.vue')['default']
     Input: typeof import('./src/components/ui/input/Input.vue')['default']
+    Loader: typeof import('./src/components/Loader.vue')['default']
+    Loading: typeof import('./src/components/Loading.vue')['default']
     NoRoutesHistory: typeof import('./src/components/NoRoutesHistory.vue')['default']
     RouteMap: typeof import('./src/components/RouteMap.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Separator: typeof import('./src/components/ui/separator/Separator.vue')['default']
     Sonner: typeof import('./src/components/ui/sonner/Sonner.vue')['default']
+    StatCard: typeof import('./src/components/StatCard.vue')['default']
   }
 }

@@ -18,9 +18,11 @@ const path = ref<[number, number][]>([])
 const data = ref<DocumentData>()
 const photoUrl = ref<string | null>(null)
 const activeSlide = ref<'photo' | 'map'>('map')
+const loading = ref(false)
 
 
 onMounted(async () => {
+  loading.value = true
   if (!userStore.user?.uid) {
     throw new Error('User not logged in')
   }
@@ -30,7 +32,7 @@ onMounted(async () => {
   if (docSnap.exists()) {
     data.value = docSnap.data()
     path.value = data.value.path || []
-    console.log('Dane trasy:', data.value)
+    loading.value = false
   } else {
     console.error('Nie znaleziono trasy.')
   }
@@ -92,35 +94,13 @@ onMounted(async () => {
                 </p>
               </div>
             </div>
-            <!-- <div class="bg-white rounded-lg shadow-md w-full h-1/2 ">
-              <div class="flex flex-col items-center justify-center h-full p-4">
-                <iconify-icon icon="lucide:map" width="50"></iconify-icon>
-                <h2>Mapa</h2>
-                <p class="text-xl font-bold">
-                  {{ data.location.city }}
-                </p>
-              </div>
-              <div class="flex flex-col items-center justify-center h-full p-4">
-                <p class="text-md text-muted-foreground flex">
-                  <iconify-icon icon="lucide:map-pin"></iconify-icon>
-                  <span class="-translatey-0.5">Punkty startowe</span>
-                </p>
-
-              </div>
-              <div class="flex flex-col items-center justify-center h-full p-4">
-                <p class="text-md text-muted-foreground flex">
-                  <iconify-icon icon="lucide:map-pin"></iconify-icon>
-                  <span class="-translatey-0.5">Punkty końcowe</span>
-                </p>
-                <p class="text-xl font-bold">
-                  {{ data.location.city }}
-                </p>
-              </div>
-            </div> -->
           </div>
         </div>
       </div>
 
     </div>
   </section>
+  <div v-else class="h-full flex flex-col items-center justify-center bg-[#F2F0EF]">
+    <Loader />
+  </div>
 </template>
