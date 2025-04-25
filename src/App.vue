@@ -9,17 +9,12 @@ const router = useRouter()
 const userStore = useUserStore()
 
 onMounted(async () => {
-  console.log('mounting...')
-  await userStore.trackAuthChanges()
+  const isUser = await userStore.trackAuthChanges()
 
-  if (userStore.user) {
-    if (userStore.user) {
-      router.push('/dashboard')
-    } else {
-      router.push('/login')
-    }
-  } else {
+  if (!isUser) {
     router.push('/login')
+  } else {
+    userStore.getSession()
   }
 })
 </script>

@@ -1,12 +1,11 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { onAuthStateChanged, getAuth, type User } from 'firebase/auth'
+import { onAuthStateChanged, getAuth, type User, signOut } from 'firebase/auth'
 import { auth } from '@/firebase/initFirebase'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null)
   const isTrackingAuthChanges = ref(false)
-
 
   const setUser = (firebaseUser: User | null) => {
     user.value = firebaseUser
@@ -42,7 +41,9 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const endSession = () => {
+    signOut(auth)
     localStorage.removeItem('user')
+    isTrackingAuthChanges.value = false
     clearUser()
   }
 
