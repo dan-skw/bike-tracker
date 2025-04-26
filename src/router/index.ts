@@ -6,12 +6,17 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 })
-router.beforeEach((to, from, next) => {
+
+router.beforeEach((to) => {
   const userStore = useUserStore()
-  if (to.meta.requiresAuth && !userStore.isLoggedIn) {
-    next('/login')
-  } else {
-    next()
+  const isAuthenticated = userStore.isLoggedIn
+  console.log('isAuthenticated', isAuthenticated)
+  const isPublicRoute = ['/login', '/register'].includes(to.path)
+
+  if (!isAuthenticated && !isPublicRoute) {
+    return {
+      path: '/login',
+    }
   }
 })
 export default router
