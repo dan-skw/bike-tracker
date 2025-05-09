@@ -15,7 +15,7 @@ const { login, loginWithGoogle, error } = useAuth()
 const handleLogin = async () => {
   await login(email.value, password.value)
   if (!error.value) {
-    router.push('/trackview')
+    router.push('/dashboard')
   } else {
     console.error('Login failed:', error.value)
   }
@@ -24,26 +24,46 @@ const handleLogin = async () => {
 
 <template>
   <section class="h-full flex flex-col items-center justify-center px-6 py-12 bg-[#F2F0EF] space-y-6">
-    <div class="text-center space-y-1">
-      <h1 class="scroll-m-20 text-3xl font-semibold tracking-tight">Logowanie</h1>
-      <p class="text-sm text-muted-foreground">Zaloguj się, aby kontynuować</p>
+    <div class="text-center space-y-1 animate-fade-in">
+      <div class="text-4xl">🔐</div>
+      <h1 class="text-3xl font-bold">Zaloguj się</h1>
+      <p class="text-sm text-gray-500">Dokończ trasę albo rozpocznij nową</p>
     </div>
 
-    <div class="bg-white rounded-xl shadow-md p-6 w-full max-w-sm space-y-4">
-      <Input v-model="email" type="email" placeholder="Email" />
+    <div class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm space-y-4 animate-fade-in">
+      <Input v-model="email" type="email" placeholder="Twój email" />
       <Input v-model="password" type="password" placeholder="Hasło" />
 
-      <Button class="w-full" @click="handleLogin">Zaloguj się</Button>
+      <Button class="w-full" @click="handleLogin">🚴 Zaloguj się</Button>
+
       <Separator />
       <Button variant="outline" class="w-full" @click="loginWithGoogle">
-        Zaloguj się przez Google
+        🔑 Zaloguj przez Google
       </Button>
 
-      <p v-if="error" class="text-center text-sm text-red-500">{{ error }}</p>
+      <p v-if="error" class="text-sm text-red-500 text-center">{{ error }}</p>
     </div>
 
-    <RouterLink to="/signup" class="text-sm text-muted-foreground hover:underline mt-2">
+    <RouterLink to="/signup" class="text-sm text-muted-foreground hover:underline">
       Nie masz konta? Zarejestruj się
     </RouterLink>
   </section>
 </template>
+
+<style scoped>
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
+</style>
