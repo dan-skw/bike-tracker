@@ -25,7 +25,7 @@ const watchId = ref<number | null>(null)
 const mapContainer = ref<HTMLElement | null>(null)
 const startTime = ref<number | null>(null)
 const toggle = ref(false)
-const vibrationThreshold = 1
+const vibrationThreshold = 0.001
 const lastVibrationKm = ref(0)
 
 const currentPosition = ref<{
