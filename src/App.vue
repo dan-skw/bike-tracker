@@ -1,7 +1,6 @@
 <script setup>
 import MainLayout from '@/layouts/MainLayout.vue'
 import { Toaster } from '@/components/ui/sonner'
-
 </script>
 
 <template>

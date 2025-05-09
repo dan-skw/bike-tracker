@@ -17,9 +17,9 @@ const register = async (email: string, password: string) => {
   try {
     const credentials = await createUserWithEmailAndPassword(auth, email, password)
     userStore.setUser(credentials.user)
-    userStore.saveSession(credentials.user) // lokalne przechowanie sesji
-  } catch (err: any) {
-    error.value = err.message
+    userStore.saveSession(credentials.user)
+  } catch (err) {
+    error.value = (err as Error).message
   }
 }
 
@@ -30,8 +30,8 @@ const login = async (email: string, password: string) => {
     const credentials = await signInWithEmailAndPassword(auth, email, password)
     userStore.setUser(credentials.user)
     userStore.saveSession(credentials.user)
-  } catch (err: any) {
-    error.value = err.message
+  } catch (err) {
+    error.value = (err as Error).message
   }
 }
 
@@ -43,8 +43,8 @@ const loginWithGoogle = async () => {
     const credentials = await signInWithPopup(auth, provider)
     userStore.setUser(credentials.user)
     userStore.saveSession(credentials.user)
-  } catch (err: any) {
-    error.value = err.message
+  } catch (err) {
+    error.value = (err as Error).message
   }
 }
 

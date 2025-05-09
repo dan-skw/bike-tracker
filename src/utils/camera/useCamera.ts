@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/user'
 import { format } from 'date-fns'
 
 export function useCamera() {
-  const uploadPhoto = async (file: File, routeId: string): Promise<string> => {
+  const uploadPhoto = async (file: File, dirName: string, routeId: string): Promise<string> => {
     const userStore = useUserStore()
     if (!userStore.user) throw new Error('User not logged in.')
     const userId = userStore.user.uid
@@ -13,7 +13,7 @@ export function useCamera() {
     const formattedDate = format(now, 'yyyy-MM-dd-HH-mm-ss')
     const fileName = `${routeId}-${formattedDate}.jpg`
 
-    const routesRef = storageRef(storage, `routes-photos/${userId}/${routeId}/${fileName}`)
+    const routesRef = storageRef(storage, `${dirName}/${userId}/${routeId}/${fileName}`)
     const metadata = {
       contentType: file.type || 'image/jpeg',
     }

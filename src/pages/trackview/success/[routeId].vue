@@ -3,7 +3,9 @@ import { ref } from 'vue'
 import { useRouteStore } from '@/stores/route'
 import { useCamera } from '@/utils/camera/useCamera'
 import { toast } from 'vue-sonner'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const routeStore = useRouteStore()
 const routeId = routeStore.latestRouteId ? routeStore.getLatestRouteId() : window.location.pathname
     .split('/').pop()
@@ -30,11 +32,12 @@ const handleUpload = async () => {
     imgUploading.value = true
     if (file.value) {
         try {
-            await uploadPhoto(file.value, routeId as string)
+            await uploadPhoto(file.value, 'routes-photos', routeId as string)
             toast('Zdjęcie zostało zapisane pomyślnie!', {
                 description: 'Zobaczysz je w podsumowaniu trasy.'
             })
             imgUploading.value = false
+            router.push('/dashboard')
         } catch (err) {
             toast('Wystąpił błąd podczas przesyłania zdjęcia.', {
                 description: 'Spróbuj ponownie później.'

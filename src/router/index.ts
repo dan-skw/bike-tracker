@@ -11,7 +11,7 @@ router.beforeEach((to) => {
   const userStore = useUserStore()
   const isAuthenticated = userStore.isLoggedIn
   console.log('isAuthenticated', isAuthenticated)
-  const isPublicRoute = ['/login', '/register'].includes(to.path)
+  const isPublicRoute = ['/login', '/signup'].includes(to.path)
 
   if (!isAuthenticated && !isPublicRoute) {
     return {

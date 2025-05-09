@@ -18,6 +18,8 @@ app.use(createPinia())
 app.use(DataLoaderPlugin, { router })
 const userStore = useUserStore()
 await userStore.trackAuthChanges()
+await userStore.loadProfile()
+
 app.use(router)
 
 app.mount('#app')
