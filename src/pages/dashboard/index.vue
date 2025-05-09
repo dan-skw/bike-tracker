@@ -11,15 +11,11 @@ const userStore = useUserStore()
 
 const stats = computed(() => statsStore.stats)
 const lastSavedRoute = computed(() => statsStore.lastRoute)
-const isEmpty = computed(() =>
-    stats.value !== null &&
-    (stats.value?.totalRoutes === 0 || lastSavedRoute.value === null)
-)
 </script>
 
 <template>
     <section class="space-y-6 h-full">
-        <NoRoutesHistory v-if="isEmpty" />
+        <NoRoutesHistory v-if="!statsStore.stats" />
 
         <div v-else class="space-y-6">
             <div class="flex flex-row justify-between items-center">
