@@ -32,5 +32,4 @@ const creationDate = computed(() => {
     </div>
     <Button class="w-full max-w-xs" variant="destructive" @click="handleSignout">Wyloguj się</Button>
   </section>
-  <Button class="w-full max-w-xs" variant="destructive" @click="handleSignout">Wyloguj się</Button>
 </template>
