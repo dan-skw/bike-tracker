@@ -28,12 +28,17 @@ onMounted(async () => {
     loading.value = true
     const userId = userStore?.uid
     if (!userId) return
+    console.log(useUserStore().profile)
 
     const userStatsSnap = await getUserStats(userId)
-
+    if (!userStatsSnap) {
+        console.log('Nie znaleziono statystyk użytkownika')
+        loading.value = false
+        return
+    }
     if (userStatsSnap) {
         const data = userStatsSnap
-
+        console.log(userStore?.providerData)
         const statsData: UserStats = {
             totalDistanceKm: data.totalDistanceKm,
             totalDurationSeconds: data.totalDurationSeconds,
@@ -56,13 +61,13 @@ onMounted(async () => {
         <div v-if="loading" class="h-full flex flex-col items-center justify-center bg-[#F2F0EF]">
             <Loader />
         </div>
-
+        <NoRoutesHistory v-if="!loading && !lastSavedRoute"></NoRoutesHistory>
         <div v-else class="space-y-6 ">
             <div v-if="stats" class="flex flex-row justify-between items-center">
                 <div class="">
                     <h4 class="scroll-m-20 text-md font-semibold tracking-tight">Podsumowanie</h4>
                     <h2 class="scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
-                        Twoje statystyki
+                        Twoje statystyki, {{ useUserStore().profile?.displayName }}
                     </h2>
                 </div>
                 <iconify-icon icon="lucide:gauge" width="58" />

@@ -25,6 +25,8 @@ const watchId = ref<number | null>(null)
 const mapContainer = ref<HTMLElement | null>(null)
 const startTime = ref<number | null>(null)
 const toggle = ref(false)
+const vibrationThreshold = 1
+const lastVibrationKm = ref(0)
 
 const currentPosition = ref<{
   city: string
@@ -113,6 +115,14 @@ function toggleTracking() {
     watchId.value = navigator.geolocation.watchPosition((position) => {
       const coords: [number, number] = [position.coords.latitude, position.coords.longitude]
       path.value.push(coords)
+      const currentDistance = distanceKm.value
+      if (
+        'vibrate' in navigator &&
+        currentDistance - lastVibrationKm.value >= vibrationThreshold
+      ) {
+        navigator.vibrate(300) // 300ms wibracji
+        lastVibrationKm.value = Math.floor(currentDistance)
+      }
 
       if (polyline) polyline.addLatLng(coords)
       if (marker) marker.setLatLng(coords)

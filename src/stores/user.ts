@@ -2,9 +2,17 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { onAuthStateChanged, getAuth, type User, signOut } from 'firebase/auth'
 import { auth } from '@/firebase/initFirebase'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '@/firebase/initFirebase'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null)
+  const profile = ref<{
+    displayName: string
+    photoURL: string | null
+    email: string | null
+    uid: string
+  } | null>()
   const isTrackingAuthChanges = ref(false)
 
   const setUser = (firebaseUser: User | null) => {
@@ -47,11 +55,48 @@ export const useUserStore = defineStore('user', () => {
     clearUser()
   }
 
+  const setProfile = (
+    displayName: string,
+    photoURL: string | null,
+    email: string | null,
+    uid: string,
+  ) => {
+    profile.value = {
+      displayName,
+      photoURL,
+      email,
+      uid,
+    }
+  }
+
+  const loadProfile = async () => {
+    const currentUser = getAuth().currentUser
+    if (!currentUser) return
+
+    const docRef = doc(db, 'users-profiles', currentUser.uid)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      const profileData = docSnap.data()
+      setProfile(
+        profileData.displayName || 'Użytkownik',
+        profileData.photoUrl || null,
+        profileData.email || null,
+        profileData.uid || currentUser.uid,
+      )
+    } else {
+      console.warn('Profil użytkownika nie istnieje w Firestore.')
+    }
+  }
+
   const isLoggedIn = computed(() => !!user.value)
 
   return {
     user,
+    profile,
     setUser,
+    setProfile,
+    loadProfile,
     clearUser,
     isLoggedIn,
     trackAuthChanges,
