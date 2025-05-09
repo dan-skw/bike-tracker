@@ -47,6 +47,7 @@ let polyline: L.Polyline | null = null
 let marker: L.Marker | null = null
 
 const distanceKm = computed(() => calculateDistance(path.value))
+const distanceMeters = computed(() => calculateDistance(path.value) * 1000)
 
 const formattedTime = computed(() => {
   const sec = elapsedSeconds.value % 60
@@ -174,7 +175,7 @@ async function endTracking() {
         }
       )
       useRouteStore().setLatestRouteId(routeId)
-      await updateStatsAfterRouteSave(useUserStore().user?.uid as string, distanceKm.value, elapsedSeconds.value)
+      await updateStatsAfterRouteSave(useUserStore().user?.uid as string, distanceKm.value, distanceMeters.value, elapsedSeconds.value)
       router.push(`/trackview/success/${routeId}`)
     }
     catch (error) {
@@ -215,7 +216,8 @@ async function endTracking() {
               <p class="text-3xl font-bold text-primary">
                 {{ formattedTime }}
               </p>
-              <p class="text-md text-muted-foreground">{{ distanceKm }} km</p>
+              <p class="text-md text-muted-foreground">{{ distanceKm }} km {{ distanceMeters }} m</p>
+
             </div>
             <Button class="rounded-full  text-white w-14 h-14" @click="toggleTracking">
               <iconify-icon :icon="toggle ? 'lucide:pause' : 'lucide:play'" width="30"></iconify-icon>

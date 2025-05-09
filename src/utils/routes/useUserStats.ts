@@ -5,6 +5,7 @@ export const useUserStats = () => {
   const updateStatsAfterRouteSave = async (
     userId: string,
     distanceKm: number,
+    distanceMeters: number,
     durationSeconds: number,
   ) => {
     const statsRef = doc(db, 'users-misc', userId, 'stats', 'stats')
@@ -15,6 +16,7 @@ export const useUserStats = () => {
       if (!statsDoc.exists()) {
         transaction.set(statsRef, {
           totalDistanceKm: distanceKm,
+          totalDistanceMeters: distanceMeters,
           totalDurationSeconds: durationSeconds,
           totalRoutes: 1,
           lastUpdated: new Date(),
@@ -22,6 +24,7 @@ export const useUserStats = () => {
       } else {
         transaction.update(statsRef, {
           totalDistanceKm: increment(distanceKm),
+          totalDistanceMeters: increment(distanceMeters),
           totalDurationSeconds: increment(durationSeconds),
           totalRoutes: increment(1),
           lastUpdated: new Date(),

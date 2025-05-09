@@ -15,6 +15,7 @@ const { getLastSavedRoute } = useRoutes()
 
 const stats = ref<UserStats>({
     totalDistanceKm: 0,
+    totalDistanceMeters: 0,
     totalDurationSeconds: 0,
     totalRoutes: 0,
     lastUpdated: new Date(),
@@ -41,6 +42,7 @@ onMounted(async () => {
         console.log(userStore?.providerData)
         const statsData: UserStats = {
             totalDistanceKm: data.totalDistanceKm,
+            totalDistanceMeters: data.totalDistanceMeters,
             totalDurationSeconds: data.totalDurationSeconds,
             totalRoutes: data.totalRoutes,
             lastUpdated: data.lastUpdated.toDate?.() ?? new Date(data.lastUpdated),
@@ -74,8 +76,8 @@ onMounted(async () => {
             </div>
 
             <div v-if="stats" class="grid grid-cols-2 gap-4">
-                <StatCard label="Łączny dystans" :value="`${stats.totalDistanceKm} km`" icon="lucide:map"
-                    iconBg="bg-blue-100" iconColor="text-blue-600" />
+                <StatCard label="Łączny dystans" :value="`${stats.totalDistanceKm} km ${stats.totalDistanceMeters} m`"
+                    icon="lucide:map" iconBg="bg-blue-100" iconColor="text-blue-600" />
                 <StatCard label="Łączny czas" :value="formatTime(stats.totalDurationSeconds)" icon="lucide:timer"
                     iconBg="bg-green-100" iconColor="text-green-600" />
                 <StatCard label="Liczba tras" :value="stats.totalRoutes" icon="lucide:bike" iconBg="bg-yellow-100"
