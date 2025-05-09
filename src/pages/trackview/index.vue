@@ -12,8 +12,11 @@ import { useRouter } from 'vue-router'
 
 import { useRouteStore } from '@/stores/route'
 import { useUserStore } from '@/stores/user'
+import { useStatsStore } from '@/stores/stats'
+
 
 import { useUserStats } from '@/utils/routes/useUserStats'
+import type { UserStats } from '@/types/UserStats'
 const { updateStatsAfterRouteSave } = useUserStats()
 const { saveRoute } = useRoutes()
 
@@ -175,7 +178,23 @@ async function endTracking() {
         }
       )
       useRouteStore().setLatestRouteId(routeId)
-      await updateStatsAfterRouteSave(useUserStore().user?.uid as string, distanceKm.value, distanceMeters.value, elapsedSeconds.value)
+      await updateStatsAfterRouteSave(useUserStore().user?.uid as string, distanceKm.value, distanceMeters.value, elapsedSeconds.value).then(async () => {
+        await useUserStats().getUserStats(useUserStore().user?.uid as string)
+          .then(statsSnap => {
+            if (statsSnap) {
+              const parsedStats: UserStats = {
+                totalDistanceKm: statsSnap.totalDistanceKm ?? 0,
+                totalDistanceMeters: statsSnap.totalDistanceMeters ?? 0,
+                totalDurationSeconds: statsSnap.totalDurationSeconds ?? 0,
+                totalRoutes: statsSnap.totalRoutes ?? 0,
+                lastUpdated: statsSnap.lastUpdated?.toDate?.() ?? new Date(),
+              }
+
+              useStatsStore().setStats(parsedStats)
+            }
+          })
+      })
+
       router.push(`/trackview/success/${routeId}`)
     }
     catch (error) {

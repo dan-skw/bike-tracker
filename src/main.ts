@@ -20,14 +20,12 @@ const app = createApp(App)
 
 app.use(createPinia())
 
-// Store'y
 const userStore = useUserStore()
 const statsStore = useStatsStore()
 
 await userStore.trackAuthChanges()
 await userStore.loadProfile?.()
 
-// Pobierz i zapisz statystyki
 const { getUserStats } = useUserStats()
 if (userStore.user?.uid) {
   const statsSnap = await getUserStats(userStore.user.uid)

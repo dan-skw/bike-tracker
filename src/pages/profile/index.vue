@@ -1,23 +1,35 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user'
+import { useStatsStore } from '@/stores/stats'
+import { useRouteStore } from '@/stores/route'
 import { useRouter } from 'vue-router'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 
 const userStore = useUserStore()
+const statsStore = useStatsStore()
+const routeStore = useRouteStore()
 const router = useRouter()
 
+let profile = computed(() => userStore.profile)
+let creationDate = computed(() => {
+  const createdAt = userStore.user?.metadata?.creationTime
+  return createdAt ? new Date(createdAt).toLocaleDateString('pl-PL') : 'brak danych'
+})
 const handleSignout = () => {
   userStore.endSession()
   userStore.clearUser()
   userStore.clearProfile()
-
+  statsStore.clearStats()
+  routeStore.clearLatestRoute()
   router.push('/')
 }
 
-const profile = computed(() => userStore.profile)
-const creationDate = computed(() => {
-  const createdAt = userStore.user?.metadata?.creationTime
-  return createdAt ? new Date(createdAt).toLocaleDateString('pl-PL') : 'brak danych'
+onMounted(() => {
+  profile = computed(() => userStore.profile)
+  creationDate = computed(() => {
+    const createdAt = userStore.user?.metadata?.creationTime
+    return createdAt ? new Date(createdAt).toLocaleDateString('pl-PL') : 'brak danych'
+  })
 })
 </script>
 
@@ -32,4 +44,5 @@ const creationDate = computed(() => {
     </div>
     <Button class="w-full max-w-xs" variant="destructive" @click="handleSignout">Wyloguj się</Button>
   </section>
+
 </template>
