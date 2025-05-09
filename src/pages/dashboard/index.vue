@@ -5,29 +5,21 @@ import { useUserStore } from '@/stores/user'
 import { formatDateToPl } from '@/utils/formatDateToPl'
 import { formatTime } from '@/utils/formatTime'
 import NoRoutesHistory from '@/components/NoRoutesHistory.vue'
-import Loader from '@/components/Loader.vue'
 
 const statsStore = useStatsStore()
 const userStore = useUserStore()
 
 const stats = computed(() => statsStore.stats)
 const lastSavedRoute = computed(() => statsStore.lastRoute)
-// pobieraj sie dane
-const isLoading = computed(() => stats.value === null && lastSavedRoute.value === null)
-// sprawdz czy sa dane
 const isEmpty = computed(() =>
     stats.value !== null &&
-    (stats.value.totalRoutes === 0 || lastSavedRoute.value === null)
+    (stats.value?.totalRoutes === 0 || lastSavedRoute.value === null)
 )
 </script>
 
 <template>
     <section class="space-y-6 h-full">
-        <div v-if="isLoading" class="h-full flex flex-col items-center justify-center bg-[#F2F0EF]">
-            <Loader />
-        </div>
-
-        <NoRoutesHistory v-else-if="isEmpty" />
+        <NoRoutesHistory v-if="isEmpty" />
 
         <div v-else class="space-y-6">
             <div class="flex flex-row justify-between items-center">

@@ -20,6 +20,15 @@ const handleLogin = async () => {
     console.error('Login failed:', error.value)
   }
 }
+
+const handleGoogleLogin = async () => {
+  await loginWithGoogle()
+  if (!error.value) {
+    router.push('/dashboard')
+  } else {
+    console.error('Google login failed:', error.value)
+  }
+}
 </script>
 
 <template>
@@ -37,7 +46,7 @@ const handleLogin = async () => {
       <Button class="w-full" @click="handleLogin">🚴 Zaloguj się</Button>
 
       <Separator />
-      <Button variant="outline" class="w-full" @click="loginWithGoogle">
+      <Button variant="outline" class="w-full" @click="handleGoogleLogin">
         🔑 Zaloguj przez Google
       </Button>
 
