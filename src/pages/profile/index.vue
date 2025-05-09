@@ -3,18 +3,18 @@ import { useUserStore } from '@/stores/user'
 import { useStatsStore } from '@/stores/stats'
 import { useRouteStore } from '@/stores/route'
 import { useRouter } from 'vue-router'
-import { computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import { formatDate } from '@/utils/formatDate'
+import type { Timestamp } from 'firebase/firestore'
 
 const userStore = useUserStore()
 const statsStore = useStatsStore()
 const routeStore = useRouteStore()
 const router = useRouter()
 
-let profile = computed(() => userStore.profile)
-let creationDate = computed(() => {
-  const createdAt = userStore.user?.metadata?.creationTime
-  return createdAt ? new Date(createdAt).toLocaleDateString('pl-PL') : 'brak danych'
-})
+const profile = userStore.profile
+const creationDate = formatDate(profile?.createdAt as Timestamp)
+
 const handleSignout = () => {
   userStore.endSession()
   userStore.clearUser()
@@ -24,12 +24,9 @@ const handleSignout = () => {
   router.push('/')
 }
 
-onMounted(() => {
-  profile = computed(() => userStore.profile)
-  creationDate = computed(() => {
-    const createdAt = userStore.user?.metadata?.creationTime
-    return createdAt ? new Date(createdAt).toLocaleDateString('pl-PL') : 'brak danych'
-  })
+onMounted(async () => {
+  await userStore.loadProfile()
+
 })
 </script>
 

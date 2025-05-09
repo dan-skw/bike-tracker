@@ -2,7 +2,7 @@ import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { onAuthStateChanged, getAuth, type User, signOut } from 'firebase/auth'
 import { auth } from '@/firebase/initFirebase'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, Timestamp } from 'firebase/firestore'
 import { db } from '@/firebase/initFirebase'
 
 export const useUserStore = defineStore('user', () => {
@@ -12,6 +12,7 @@ export const useUserStore = defineStore('user', () => {
     photoURL: string | null
     email: string | null
     uid: string
+    createdAt: Date | Timestamp
   } | null>()
   const isTrackingAuthChanges = ref(false)
 
@@ -60,12 +61,14 @@ export const useUserStore = defineStore('user', () => {
     photoURL: string | null,
     email: string | null,
     uid: string,
+    createdAt: Date | Timestamp,
   ) => {
     profile.value = {
       displayName,
       photoURL,
       email,
       uid,
+      createdAt: createdAt || new Date(),
     }
   }
 
@@ -83,6 +86,7 @@ export const useUserStore = defineStore('user', () => {
         profileData.photoUrl || null,
         profileData.email || null,
         profileData.uid || currentUser.uid,
+        profileData.createdAt || new Date(),
       )
     } else {
       console.warn('Profil użytkownika nie istnieje w Firestore.')
