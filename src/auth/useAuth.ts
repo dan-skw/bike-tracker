@@ -38,6 +38,9 @@ const login = async (email: string, password: string) => {
       credentials.user.photoURL || null,
       credentials.user.email || null,
       credentials.user.uid,
+      credentials.user.metadata.creationTime
+        ? new Date(credentials.user.metadata.creationTime)
+        : new Date(),
     )
     const statsStore = useStatsStore()
     const statsRef = doc(db, 'users-misc', credentials.user.uid, 'stats', 'stats')
@@ -86,6 +89,9 @@ const loginWithGoogle = async () => {
       credentials.user.photoURL || null,
       credentials.user.email || null,
       credentials.user.uid,
+      credentials.user.metadata.creationTime
+        ? new Date(credentials.user.metadata.creationTime)
+        : new Date(),
     )
   } catch (err) {
     error.value = (err as Error).message

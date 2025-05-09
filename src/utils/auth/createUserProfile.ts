@@ -42,7 +42,13 @@ export const createUserProfile = async (user: User, displayName: string, avatarF
     await setDoc(userProfilesRef, userProfile)
     userStore.setUser(user)
     userStore.saveSession(user)
-    userStore.setProfile(user.displayName || 'Rowerzysta', photoUrl, user.email, user.uid)
+    userStore.setProfile(
+      user.displayName || 'Rowerzysta',
+      photoUrl,
+      user.email,
+      user.uid,
+      userProfile.createdAt,
+    )
   } catch (err) {
     console.error('Error creating user profile:', err)
     throw new Error('Error creating user profile')
