@@ -89,6 +89,10 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  const clearProfile = () => {
+    profile.value = null
+  }
+
   const isLoggedIn = computed(() => !!user.value)
 
   return {
@@ -97,6 +101,7 @@ export const useUserStore = defineStore('user', () => {
     setUser,
     setProfile,
     loadProfile,
+    clearProfile,
     clearUser,
     isLoggedIn,
     trackAuthChanges,

@@ -43,6 +43,12 @@ const loginWithGoogle = async () => {
     const credentials = await signInWithPopup(auth, provider)
     userStore.setUser(credentials.user)
     userStore.saveSession(credentials.user)
+    userStore.setProfile(
+      credentials.user.displayName || 'Rowerzysta',
+      credentials.user.photoURL || null,
+      credentials.user.email || null,
+      credentials.user.uid,
+    )
   } catch (err) {
     error.value = (err as Error).message
   }

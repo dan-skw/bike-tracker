@@ -8,7 +8,10 @@ const router = useRouter()
 
 const handleSignout = () => {
   userStore.endSession()
-  router.push('/login')
+  userStore.clearUser()
+  userStore.clearProfile()
+
+  router.push('/')
 }
 
 const profile = computed(() => userStore.profile)
@@ -29,4 +32,5 @@ const creationDate = computed(() => {
     </div>
     <Button class="w-full max-w-xs" variant="destructive" @click="handleSignout">Wyloguj się</Button>
   </section>
+
 </template>
